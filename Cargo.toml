@@ -1,0 +1,10 @@
+[package]
+name = "pad"
+description = "Library for padding strings at runtime"
+
+authors = ["Ben S <ogham@bsago.me>"]
+documentation = "http://bsago.me/doc/pad/"
+homepage = "https://github.com/ogham/rust-pad"
+license = "MIT"
+readme = "README.md"
+version = "0.1.0"
