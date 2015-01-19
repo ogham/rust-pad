@@ -41,7 +41,7 @@ number of spaces necessary to bring it up to a total of sixteen characters
 wide.
 
 String length is determined with the
-[width](http://doc.rust-lang.org/nightly/std/char/trait.CharExt.html#tymethod.width)
+[width](http://doc.rust-lang.org/nightly/std/str/trait.StrExt.html#tymethod.width)
 function, without assuming CJK.
 
 
