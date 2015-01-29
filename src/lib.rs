@@ -1,7 +1,7 @@
 #![crate_name = "pad"]
 #![crate_type = "rlib"]
 #![crate_type = "dylib"]
-#![allow(unstable)]
+#![feature(collections, core)]
 #![unstable]
 
 //! This is a library for padding strings at runtime.
@@ -169,7 +169,7 @@ impl PadStr for str {
 
         if cols >= width {
             if truncate {
-                return self.slice_to(width).to_string();
+                return self[..width].to_string();
             }
             else {
                 return self.to_string();
