@@ -113,7 +113,7 @@
 use self::Alignment::*;
 
 /// An **alignment** tells the padder where to put the spaces.
-#[derive(PartialEq, Eq, Show, Clone)]
+#[derive(PartialEq, Eq, Debug, Clone)]
 pub enum Alignment {
 
     /// Text on the left, spaces on the right.
