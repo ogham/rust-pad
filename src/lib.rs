@@ -1,7 +1,7 @@
 #![crate_name = "pad"]
 #![crate_type = "rlib"]
 #![crate_type = "dylib"]
-#![feature(collections, core)]
+#![feature(unicode)]
 #![unstable]
 
 //! This is a library for padding strings at runtime.
@@ -186,9 +186,9 @@ impl PadStr for str {
         };
 
         let mut s = String::new();
-        for _ in range(0, left_pad) { s.push(pad_char) }
+        for _ in 0..left_pad { s.push(pad_char) }
         s.push_str(self);
-        for _ in range(0, right_pad) { s.push(pad_char) }
+        for _ in 0..right_pad { s.push(pad_char) }
         s
     }
 }
