@@ -7,4 +7,8 @@ documentation = "http://bsago.me/doc/pad/"
 homepage = "https://github.com/ogham/rust-pad"
 license = "MIT"
 readme = "README.md"
-version = "0.1.3"
+version = "0.1.4"
+
+[dependencies]
+
+unicode-width = "0.1.1"

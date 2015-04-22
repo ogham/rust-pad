@@ -1,8 +1,6 @@
 #![crate_name = "pad"]
 #![crate_type = "rlib"]
 #![crate_type = "dylib"]
-#![feature(unicode)]
-#![unstable]
 
 //! This is a library for padding strings at runtime.
 //!
@@ -110,7 +108,10 @@
 //! possibly crash your program. So if your padding calls are failing for some
 //! reason, this is probably why.
 
+extern crate unicode_width;
+use unicode_width::UnicodeWidthStr;
 use self::Alignment::*;
+
 
 /// An **alignment** tells the padder where to put the spaces.
 #[derive(PartialEq, Eq, Debug, Clone)]
@@ -165,7 +166,7 @@ impl PadStr for str {
     fn pad(&self, width: usize, pad_char: char, alignment: Alignment, truncate: bool) -> String {
 
         // Use width instead of len for graphical display
-        let cols = self.width(false);
+        let cols = UnicodeWidthStr::width(self);
 
         if cols >= width {
             if truncate {
