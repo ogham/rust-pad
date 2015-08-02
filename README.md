@@ -11,7 +11,7 @@ runtime-friendly fashion here.
 It provides four helper functions for the most common use cases, and one
 main function to cover the other cases.
 
-### [View the Rustdoc](http://bsago.me/doc/pad/)
+### [View the Rustdoc](http://ogham.rustdocs.org/pad/)
 
 # Installation
 
