@@ -3,12 +3,11 @@ name = "pad"
 description = "Library for padding strings at runtime"
 
 authors = ["Ben S <ogham@bsago.me>"]
-documentation = "http://ogham.rustdocs.org/pad/"
+documentation = "https://docs.rs/pad/"
 homepage = "https://github.com/ogham/rust-pad"
 license = "MIT"
 readme = "README.md"
-version = "0.1.4"
+version = "0.1.5"
 
 [dependencies]
-
 unicode-width = "0.1.1"

@@ -121,11 +121,10 @@
 
 extern crate unicode_width;
 use unicode_width::UnicodeWidthStr;
-use self::Alignment::*;
 
 
 /// An **alignment** tells the padder where to put the spaces.
-#[derive(PartialEq, Eq, Debug, Clone)]
+#[derive(PartialEq, Eq, Debug, Copy, Clone)]
 pub enum Alignment {
 
     /// Text on the left, spaces on the right.
@@ -141,21 +140,19 @@ pub enum Alignment {
     MiddleRight,
 }
 
-impl<'a> Copy for Alignment { }
-
 /// Functions to do with string padding.
 pub trait PadStr {
 
     /// Pad a string to be at least the given width by adding spaces on the
     /// right.
     fn pad_to_width(&self, width: usize) -> String {
-        self.pad(width, ' ', Left, false)
+        self.pad(width, ' ', Alignment::Left, false)
     }
 
     /// Pad a string to be at least the given width by adding the given
     /// character on the right.
     fn pad_to_width_with_char(&self, width: usize, pad_char: char) -> String {
-        self.pad(width, pad_char, Left, false)
+        self.pad(width, pad_char, Alignment::Left, false)
     }
 
     /// Pad a string to be at least the given with by adding spaces around it.
@@ -166,7 +163,7 @@ pub trait PadStr {
     /// Pad a string to be *exactly* the given width by either adding spaces
     /// on the right, or by truncating it to that width.
     fn with_exact_width(&self, width: usize) -> String {
-        self.pad(width, ' ', Left, true)
+        self.pad(width, ' ', Alignment::Left, true)
     }
 
     /// Pad a string to the given width somehow.
@@ -175,6 +172,7 @@ pub trait PadStr {
 
 impl PadStr for str {
     fn pad(&self, width: usize, pad_char: char, alignment: Alignment, truncate: bool) -> String {
+        use self::Alignment::*;
 
         // Use width instead of len for graphical display
         let cols = UnicodeWidthStr::width(self);
