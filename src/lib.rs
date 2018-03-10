@@ -2,6 +2,16 @@
 #![crate_type = "rlib"]
 #![crate_type = "dylib"]
 
+#![deny(unsafe_code)]
+
+#![warn(missing_copy_implementations)]
+#![warn(missing_debug_implementations)]
+#![warn(missing_docs)]
+#![warn(trivial_numeric_casts)]
+#![warn(unreachable_pub)]
+#![warn(unused_results)]
+
+
 //! This is a library for padding strings at runtime.
 //!
 //! The routines in `std::fmt` only work with formatting strings provided at
@@ -107,6 +117,7 @@
 //! it'll wrap around to a positive size, and produce a massive string and
 //! possibly crash your program. So if your padding calls are failing for some
 //! reason, this is probably why.
+
 
 extern crate unicode_width;
 use unicode_width::UnicodeWidthStr;
