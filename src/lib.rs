@@ -14,12 +14,6 @@
 
 //! This is a library for padding strings at runtime.
 //!
-//! The routines in `std::fmt` only work with formatting strings provided at
-//! compile-time, making them unsuitable for padding to a custom or
-//! user-defined value. Rather than re-implement all of `std::fmt`, padding is
-//! probably the most common use case, which is written in a more
-//! runtime-friendly fashion here.
-//!
 //! It provides four helper functions for the most common use cases, and one
 //! main function (`pad`) to cover the other cases.
 //!
