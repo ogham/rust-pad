@@ -189,8 +189,6 @@ pub trait PadStr {
 
 impl PadStr for str {
     fn pad(&self, width: usize, pad_char: char, alignment: Alignment, truncate: bool) -> String {
-        use self::Alignment::*;
-
         // Use width instead of len for graphical display
         let cols = UnicodeWidthStr::width(self);
 
@@ -206,10 +204,10 @@ impl PadStr for str {
         let diff = width - cols;
 
         let (left_pad, right_pad) = match alignment {
-            Left        => (0, diff),
-            Right       => (diff, 0),
-            Middle      => (diff / 2, diff - diff / 2),
-            MiddleRight => (diff - diff / 2, diff / 2),
+            Alignment::Left         => (0, diff),
+            Alignment::Right        => (diff, 0),
+            Alignment::Middle       => (diff / 2, diff - diff / 2),
+            Alignment::MiddleRight  => (diff - diff / 2, diff / 2),
         };
 
         let mut s = String::new();
@@ -219,6 +217,7 @@ impl PadStr for str {
         s
     }
 }
+
 
 #[cfg(test)]
 mod test {
