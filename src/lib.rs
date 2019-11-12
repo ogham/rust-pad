@@ -29,14 +29,14 @@
 //!
 //! For example, to pad a number with zeroes:
 //!
-//! ```rust
+//! ```
 //! // Padding using std::fmt
 //! assert_eq!("0000012345", format!("{:0>10}", 12345));
 //! ```
 //!
 //! You can even use a variable for the padding width:
 //!
-//! ```rust
+//! ```
 //! // Padding using std::fmt
 //! assert_eq!("hello       ", format!("{:width$}", "hello", width=12));
 //! ```
@@ -50,12 +50,13 @@
 //! You can pad a string to have a minimum width with the `pad_to_width`
 //! method:
 //!
-//! ```rust
+//! ```
 //! use pad::PadStr;
+//!
 //! println!("{}", "Hi there!".pad_to_width(16));
 //! ```
 //!
-//! This will print out "Hi there!" followed by seven spaces, which is the
+//! This will print out “Hi there!” followed by seven spaces, which is the
 //! number of spaces necessary to bring it up to a total of sixteen characters
 //! wide.
 //!
@@ -66,8 +67,9 @@
 //! By default, strings are left-aligned: any extra characters are added on
 //! the right. To change this, pass in an `Alignment` value:
 //!
-//! ```rust
+//! ```
 //! use pad::{PadStr, Alignment};
+//!
 //! let s = "I'm over here".pad_to_width_with_alignment(20, Alignment::Right);
 //! ```
 //!
@@ -76,18 +78,19 @@
 //! - **Left**, which puts the text on the left and spaces on the right;
 //! - **Right**, which puts the text on the right and spaces on the left;
 //! - **Middle**, which centres the text evenly, putting it slightly to the
-//!   left if it can't be exactly centered;
+//!   left if it can’t be exactly centered;
 //! - **MiddleRight**, as above, but to the right.
 //!
 //!
 //! Characters
 //! ----------
 //!
-//! Another thing that's set by default is the character that's used to pad
-//! the strings - by default, it's space, but you can change it:
+//! Another thing that’s set by default is the character that’s used to pad
+//! the strings — by default, it’s space, but you can change it:
 //!
-//! ```rust
+//! ```
 //! use pad::PadStr;
+//!
 //! let s = "Example".pad_to_width_with_char(10, '_');
 //! ```
 //!
@@ -103,10 +106,11 @@
 //! You can instead tell it to pad with a maximum value, which will truncate
 //! the input when a string longer than the width is passed in.
 //!
-//! ```rust
+//! ```
 //! use pad::PadStr;
-//! let short = "short".with_exact_width(10);  // "short     "
-//! let long = "this string is long".with_exact_width(10);  // "this strin"
+//!
+//! let short = "short".with_exact_width(10);                // "short     "
+//! let long  = "this string is long".with_exact_width(10);  // "this strin"
 //! ```
 //!
 //!
@@ -117,13 +121,13 @@
 //! use in special cases. Here, in order to **right**-pad a number with
 //! **zeroes**, pass in all the arguments:
 //!
-//! ```rust
+//! ```
 //! use pad::{PadStr, Alignment};
+//!
 //! let s = "12345".pad(10, '0', Alignment::Right, true);
 //! ```
 //!
-//! (The `true` at the end could just as easily be `false`. It's whether to
-//! truncate or not.)
+//! (The `true` at the end governs whether to truncate or not.)
 //!
 //!
 //! Note on Debugging
@@ -131,7 +135,7 @@
 //!
 //! One very last point: the width function takes a `usize`, rather than a
 //! signed number type. This means that if you try to pass in a negative size,
-//! it'll wrap around to a positive size, and produce a massive string and
+//! it’ll wrap around to a positive size, and produce a massive string and
 //! possibly crash your program. So if your padding calls are failing for some
 //! reason, this is probably why.
 
@@ -150,10 +154,10 @@ pub enum Alignment {
     /// Text on the right, spaces on the left.
     Right,
 
-    /// Text in the middle, spaces around it, but **shifted to the left** if it can't be exactly central.
+    /// Text in the middle, spaces around it, but **shifted to the left** if it can’t be exactly central.
     Middle,
 
-    /// Text in the middle, spaces around it, but **shifted to the right** if it can't be exactly central.
+    /// Text in the middle, spaces around it, but **shifted to the right** if it can’t be exactly central.
     MiddleRight,
 }
 
