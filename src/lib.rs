@@ -1,7 +1,3 @@
-#![crate_name = "pad"]
-#![crate_type = "rlib"]
-#![crate_type = "dylib"]
-
 #![deny(unsafe_code)]
 
 #![warn(missing_copy_implementations)]
