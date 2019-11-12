@@ -3,12 +3,6 @@
 
 This is a library for padding strings at runtime.
 
-The routines in `std::fmt` only work with formatting strings provided at
-compile-time, making them unsuitable for padding to a custom or
-user-defined value. Rather than re-implement all of `std::fmt`, padding is
-probably the most common use case, which is written in a more
-runtime-friendly fashion here.
-
 It provides four helper functions for the most common use cases, and one
 main function to cover the other cases.
 
@@ -23,6 +17,29 @@ This crate works with [Cargo](http://crates.io). Add the following to your `Carg
 [dependencies]
 pad = "0.1"
 ```
+
+
+# Padding in the stdlib
+
+**You do not need this crate for simple padding!**
+It’s possible to pad strings using the Rust standard library.
+
+For example, to pad a number with zeroes:
+
+```rust
+// Padding using std::fmt
+assert_eq!("0000012345", format!("{:0>10}", 12345));
+```
+
+You can even use a variable for the padding width:
+
+```rust
+// Padding using std::fmt
+assert_eq!("hello       ", format!("{:width$}", "hello", width=12));
+```
+
+The [Rust documentation for `std::fmt`](https://doc.rust-lang.org/std/fmt/)
+contains more examples. The rest of the examples will use the `pad` crate.
 
 
 # Usage
