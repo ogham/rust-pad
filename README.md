@@ -100,10 +100,17 @@ in its entirety.
 You can instead tell it to pad with a maximum value, which will truncate
 the input when a string longer than the width is passed in.
 
+Unicode width is taken into account for this truncation. Since some unicode
+characters are more than 1 character width, it's possible for the truncated
+string to be smaller than the exact width, but the difference will be padded
+as usual.
+
 ```rust
 use pad::PadStr;
 let short = "short".with_exact_width(10);  // "short     "
 let long = "this string is long".with_exact_width(10);  // "this strin"
+let unicode_long = "大きい".with_exact_width(2);  // "大"
+let unicode_split = "大きい".with_exact_width(3);  // "大 "
 ```
 
 
