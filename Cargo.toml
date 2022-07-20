@@ -7,7 +7,7 @@ documentation = "https://docs.rs/pad/"
 homepage = "https://github.com/ogham/rust-pad"
 license = "MIT"
 readme = "README.md"
-version = "0.1.6"
+version = "0.2.0"
 
 [dependencies]
-unicode-width = "0.1.6"
+unicode-width = "0.1.9"

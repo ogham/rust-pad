@@ -1,12 +1,10 @@
 #![deny(unsafe_code)]
-
 #![warn(missing_copy_implementations)]
 #![warn(missing_debug_implementations)]
 #![warn(missing_docs)]
 #![warn(trivial_numeric_casts)]
 #![warn(unreachable_pub)]
 #![warn(unused_results)]
-
 
 //! This is a library for padding strings at runtime.
 //!
@@ -102,11 +100,18 @@
 //! You can instead tell it to pad with a maximum value, which will truncate
 //! the input when a string longer than the width is passed in.
 //!
+//! Unicode width is taken into account for this truncation. Since some
+//! unicode characters are more than 1 character width, it's possible for the
+//! truncated string to be smaller than the exact width, but the difference
+//! will be padded as usual.
+//!
 //! ```
 //! use pad::PadStr;
 //!
 //! let short = "short".with_exact_width(10);                // "short     "
 //! let long  = "this string is long".with_exact_width(10);  // "this strin"
+//! let unicode_long = "大きい".with_exact_width(2);         // "大"
+//! let unicode_split = "大きい".with_exact_width(3);        // "大 "
 //! ```
 //!
 //!
@@ -135,15 +140,12 @@
 //! possibly crash your program. So if your padding calls are failing for some
 //! reason, this is probably why.
 
-
 extern crate unicode_width;
-use unicode_width::UnicodeWidthStr;
-
+use unicode_width::{UnicodeWidthChar, UnicodeWidthStr};
 
 /// An **alignment** tells the padder where to put the spaces.
 #[derive(PartialEq, Eq, Debug, Copy, Clone)]
 pub enum Alignment {
-
     /// Text on the left, spaces on the right.
     Left,
 
@@ -159,7 +161,6 @@ pub enum Alignment {
 
 /// Functions to do with string padding.
 pub trait PadStr {
-
     /// Pad a string to be at least the given width by adding spaces on the
     /// right.
     fn pad_to_width(&self, width: usize) -> String {
@@ -190,47 +191,66 @@ pub trait PadStr {
 impl PadStr for str {
     fn pad(&self, width: usize, pad_char: char, alignment: Alignment, truncate: bool) -> String {
         // Use width instead of len for graphical display
-        let cols = UnicodeWidthStr::width(self);
+        let mut cols = UnicodeWidthStr::width(self);
+        let mut truncated_string: Option<String> = None;
 
         if cols >= width {
             if truncate {
-                return self[..width].to_string();
-            }
-            else {
+                let ts: String = self
+                    .chars()
+                    .scan(0, |total_width, ch| {
+                        *total_width += UnicodeWidthChar::width(ch).unwrap_or(0);
+                        if *total_width > width {
+                            None
+                        } else {
+                            Some(ch)
+                        }
+                    })
+                    .collect();
+                cols = UnicodeWidthStr::width(ts.as_str());
+                truncated_string = Some(ts);
+            } else {
                 return self.to_string();
             }
         }
 
         let diff = width - cols;
+        let str_to_pad = truncated_string
+            .as_ref()
+            .map(String::as_str)
+            .unwrap_or(self);
 
         let (left_pad, right_pad) = match alignment {
-            Alignment::Left         => (0, diff),
-            Alignment::Right        => (diff, 0),
-            Alignment::Middle       => (diff / 2, diff - diff / 2),
-            Alignment::MiddleRight  => (diff - diff / 2, diff / 2),
+            Alignment::Left => (0, diff),
+            Alignment::Right => (diff, 0),
+            Alignment::Middle => (diff / 2, diff - diff / 2),
+            Alignment::MiddleRight => (diff - diff / 2, diff / 2),
         };
 
         let mut s = String::new();
-        for _ in 0..left_pad { s.push(pad_char) }
-        s.push_str(self);
-        for _ in 0..right_pad { s.push(pad_char) }
+        for _ in 0..left_pad {
+            s.push(pad_char)
+        }
+        s.push_str(str_to_pad);
+        for _ in 0..right_pad {
+            s.push(pad_char)
+        }
         s
     }
 }
 
-
 #[cfg(test)]
 mod test {
-    use super::PadStr;
     use super::Alignment::*;
+    use super::PadStr;
 
     macro_rules! test {
-    	($name: ident: $input: expr => $result: expr) => {
-    		#[test]
-    		fn $name() {
-    			assert_eq!($result.to_string(), $input)
-    		}
-    	};
+        ($name: ident: $input: expr => $result: expr) => {
+            #[test]
+            fn $name() {
+                assert_eq!($result.to_string(), $input)
+            }
+        };
     }
 
     test!(zero: "".pad_to_width(0) => "");
@@ -258,4 +278,8 @@ mod test {
 
     test!(truncate:  "this song is just six words long".with_exact_width(7) => "this so");
     test!(too_short: "stormclouds".with_exact_width(15) => "stormclouds    ");
+    test!(truncate_accent: "pâtés".with_exact_width(4) => "pâté");
+    test!(truncate_japanese: "ありがとうございます".with_exact_width(10) => "ありがとう");
+    test!(truncate_japanese_inexact: "ありがとうございます".with_exact_width(11) => "ありがとう ");
+    test!(truncate_japanese_right_inexact_other_char: "ありがとうございます".pad(11, '-', Right, true)=> "-ありがとう");
 }
